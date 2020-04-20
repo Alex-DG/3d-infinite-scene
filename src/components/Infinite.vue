@@ -109,7 +109,6 @@ export default {
     resize
   },
   mounted() {
-    console.log('component mounted!')
     init()
   }
 }
