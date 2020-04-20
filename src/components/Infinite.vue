@@ -15,9 +15,10 @@ var mesh = null
 var dummy = new THREE.Object3D()
 var sectionWidth = 200
 
+var goZoom = false
+
 function initThree() {
   // Creating the scene, renderer, camera
-
   renderer.setPixelRatio(window.devicePixelRatio || 1)
   renderer.setClearColor(0x161216)
 
@@ -76,12 +77,27 @@ function loop() {
 }
 
 function render() {
+  // Zoom In
+  if (goZoom && camera.position.z > 300) {
+    camera.position.z = lerp(camera.position.z, 300, 0.014)
+  }
+
+  // Zoom Out
+  if (camera.position.z < 2000 && !goZoom) {
+    camera.position.z = lerp(camera.position.z, 2000, 0.014)
+  }
+
   // Move the camera
-  camera.position.x += 5.0
+  camera.position.x += 4.0
 
   loop()
 
   renderer.render(scene, camera)
+}
+
+// Transform.position, wantedPosition, Time.deltaTime
+function lerp(a, b, t) {
+  return (1 - t) * a + t * b
 }
 
 function animate() {
@@ -97,6 +113,14 @@ function init() {
   window.addEventListener('resize', resize, {
     passive: true
   })
+
+  document.body.addEventListener(
+    'click',
+    () => {
+      goZoom = !goZoom
+    },
+    { passive: true }
+  )
 
   addInstancedMesh()
   animate()
