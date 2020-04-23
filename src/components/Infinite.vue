@@ -1,36 +1,47 @@
 <template>
-  <div id="container"></div>
+  <canvas id="container" />
 </template>
 
 <script>
 import * as THREE from 'three'
 
+var canvas = null
+
+var CAMERA_Z = 500
+
 var scene = new THREE.Scene()
-var renderer = new THREE.WebGLRenderer()
-var camera = new THREE.PerspectiveCamera(45, 0, 1, 2000)
+// var renderer = new THREE.WebGLRenderer({ canvas })
+var renderer = null
+var camera = new THREE.PerspectiveCamera(45, 2, 0.1, CAMERA_Z)
 
 var loopSectionPosition = 0
 
 var mesh = null
 var dummy = new THREE.Object3D()
 var sectionWidth = 200
+var CUBE = 40
 
 var goZoom = false
 
 function initThree() {
+  canvas = document.getElementById('container')
+  renderer = new THREE.WebGLRenderer({ canvas })
+  renderer.setSize(window.innerWidth, canvas.clientHeight)
+
   // Creating the scene, renderer, camera
-  renderer.setPixelRatio(window.devicePixelRatio || 1)
+  renderer.setPixelRatio(window.devicePixelRatio + 1 || 1)
   renderer.setClearColor(0x161216)
 
   camera.position.y = 0
-  camera.position.z = 2000
+  camera.position.z = CAMERA_Z
 
-  document.body.appendChild(renderer.domElement)
+  // document.body.appendChild(renderer.domElement)
 }
 
 function resize() {
-  renderer.height = window.innerHeight
+  renderer.height = canvas.clientHeight
   renderer.width = window.innerWidth
+
   renderer.setSize(renderer.width, renderer.height)
 
   camera.aspect = renderer.width / renderer.height
@@ -41,9 +52,9 @@ function resize() {
 function addInstancedMesh() {
   // An InstanceMesh of 4 Cubes
   mesh = new THREE.InstancedMesh(
-    new THREE.BoxBufferGeometry(50, 50, 50),
+    new THREE.BoxBufferGeometry(CUBE, CUBE, CUBE),
     new THREE.MeshNormalMaterial(),
-    4
+    8
   )
 
   scene.add(mesh)
@@ -78,17 +89,17 @@ function loop() {
 
 function render() {
   // Zoom In
-  if (goZoom && camera.position.z > 300) {
-    camera.position.z = lerp(camera.position.z, 300, 0.014)
+  if (goZoom && camera.position.z > 100) {
+    camera.position.z = lerp(camera.position.z, 100, 0.014)
   }
 
   // Zoom Out
-  if (camera.position.z < 2000 && !goZoom) {
-    camera.position.z = lerp(camera.position.z, 2000, 0.014)
+  if (camera.position.z < CAMERA_Z && !goZoom) {
+    camera.position.z = lerp(camera.position.z, CAMERA_Z, 0.014)
   }
 
   // Move the camera
-  camera.position.x += 4.0
+  camera.position.x += 2.0
 
   loop()
 
@@ -139,7 +150,9 @@ export default {
 </script>
 
 <style scoped>
-/* #container {
-  height: 300px;
-} */
+canvas {
+  /* display: block; */
+  width: 100%;
+  height: 450px;
+}
 </style>

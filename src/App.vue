@@ -1,7 +1,13 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <Infinite />
+    <h1>3D Infinite Scene - Vue, Three & Typescript</h1>
+    <section>
+      <p>Left click: Zoom In/Zoom Out</p>
+    </section>
+    <section>
+      <Infinite />
+    </section>
   </div>
 </template>
 
@@ -23,6 +29,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+body {
+  margin: 0;
+  padding: 10px 0;
+}
+img {
+  height: 130px;
 }
 </style>
