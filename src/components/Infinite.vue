@@ -1,5 +1,7 @@
 <template>
-  <canvas id="container" />
+  <div>
+    <canvas id="canvas" />
+  </div>
 </template>
 
 <script>
@@ -18,13 +20,15 @@ var loopSectionPosition = 0
 
 var mesh = null
 var dummy = new THREE.Object3D()
-var sectionWidth = 200
-var CUBE = 40
+
+var SECTION_WIDTH = 200
+var CUBE_SIZE = 50
+var INSTANCED_MESH = 4
 
 var goZoom = false
 
 function initThree() {
-  canvas = document.getElementById('container')
+  canvas = document.getElementById('canvas')
   renderer = new THREE.WebGLRenderer({ canvas })
   renderer.setSize(window.innerWidth, canvas.clientHeight)
 
@@ -52,9 +56,9 @@ function resize() {
 function addInstancedMesh() {
   // An InstanceMesh of 4 Cubes
   mesh = new THREE.InstancedMesh(
-    new THREE.BoxBufferGeometry(CUBE, CUBE, CUBE),
+    new THREE.BoxBufferGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE),
     new THREE.MeshNormalMaterial(),
-    8
+    INSTANCED_MESH
   )
 
   scene.add(mesh)
@@ -66,8 +70,8 @@ function setInstanceMeshPositions(mesh, section) {
   for (var i = 0; i < mesh.count; i++) {
     // We add 200 units of distance (the width of the section) between each.
 
-    var xStaticPositon = -sectionWidth * (i - 1)
-    var xSectionPosition = sectionWidth * section
+    var xStaticPositon = -SECTION_WIDTH * (i - 1)
+    var xSectionPosition = SECTION_WIDTH * section
     var x = xStaticPositon + xSectionPosition
 
     dummy.position.set(x, 0, 0)
@@ -80,7 +84,7 @@ function setInstanceMeshPositions(mesh, section) {
 }
 
 function loop() {
-  var distance = Math.round(camera.position.x / sectionWidth)
+  var distance = Math.round(camera.position.x / SECTION_WIDTH)
   if (distance !== loopSectionPosition) {
     loopSectionPosition = distance
     setInstanceMeshPositions(mesh, loopSectionPosition)
@@ -125,7 +129,17 @@ function init() {
     passive: true
   })
 
-  document.body.addEventListener(
+  window.addEventListener(
+    'wheel',
+    () => {
+      camera.position.x += 10.0
+    },
+    {
+      passive: true
+    }
+  )
+
+  window.addEventListener(
     'click',
     () => {
       goZoom = !goZoom
@@ -150,9 +164,8 @@ export default {
 </script>
 
 <style scoped>
-canvas {
-  /* display: block; */
+#canvas {
   width: 100%;
-  height: 450px;
+  height: 380px;
 }
 </style>

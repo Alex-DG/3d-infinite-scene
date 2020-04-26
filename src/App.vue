@@ -2,12 +2,12 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <h1>3D Infinite Scene - Vue, Three & Typescript</h1>
-    <section>
-      <p>Left click: Zoom In/Zoom Out</p>
-    </section>
-    <section>
-      <Infinite />
-    </section>
+    <ul>
+      <li>Left click: Zoom In/Zoom Out</li>
+      <li>Mouse wheel: Increase camera speed</li>
+    </ul>
+
+    <Infinite />
   </div>
 </template>
 
@@ -32,9 +32,8 @@ export default {
 }
 body {
   margin: 0;
-  padding: 10px 0;
 }
 img {
-  height: 130px;
+  height: 120px;
 }
 </style>
