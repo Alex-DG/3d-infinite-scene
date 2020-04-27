@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <h1>3D Infinite Scene - Vue, Three & Typescript</h1>
-    <ul>
+    <ul class="commands">
       <li>Left click: Zoom In/Zoom Out</li>
       <li>Mouse wheel: Increase camera speed</li>
     </ul>
@@ -35,5 +35,9 @@ body {
 }
 img {
   height: 120px;
+}
+
+.commands {
+  list-style-type: none;
 }
 </style>
